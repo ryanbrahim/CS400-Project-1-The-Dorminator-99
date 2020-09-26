@@ -26,6 +26,10 @@ public ValueType getValue(KeyType key)
 	
 
 }
-
+public boolean containsKey(KeyType key) 
+{
+    boolean check = htm.containsKey(key);
+    return check; 
+}
 
 }
