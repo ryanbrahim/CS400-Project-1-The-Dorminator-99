@@ -8,7 +8,7 @@
 <ul> 
 <li> Click on create "New File" </li> 
 <li> Then type your name and press '/' (the forward slash) </li> 
-<li> Copy and paste any one of your files </li> 
+<li> Copy and paste any one of your files, and click on commit at the bottom</li> 
 <li> Then you could upload the rest using 'upload file' in the file directory (navigate back to the file directory with your file name) </li> 
 </ul> 
 
