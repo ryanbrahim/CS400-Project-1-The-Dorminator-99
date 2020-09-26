@@ -1,6 +1,5 @@
 # CS400-Project-1-The-Dorminator-99
 
-Hey everybody! 
 
 <h1> Please create a directory of your own name </h1> 
 
