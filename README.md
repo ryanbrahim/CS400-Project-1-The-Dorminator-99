@@ -7,7 +7,7 @@
 
 <ul> 
 <li> Click on create "New File" </li> 
-<li> Then type your name and press '/' (the forward) </li> 
+<li> Then type your name and press '/' (the forward slash) </li> 
 <li> Copy and paste one code in your file </li> 
 <li> Then you could upload the rest using 'upload file' in the file directory (navigate back to the file directory with your file name) </li> 
 </ul> 
