@@ -1,4 +1,4 @@
-<h3> So the code above extracts text from a txt file. </h3> 
+<h3> The code above extracts text from a txt file. </h3> 
 
 <h4> The format in which entries should be made in txt file : </h4> 
 <ul> 
