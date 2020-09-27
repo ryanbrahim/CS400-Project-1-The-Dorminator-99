@@ -36,8 +36,8 @@ public class FileInput
       line = line.trim();
       
       String[] arr = line.split(delim); //Make String array, split by ":"
-      arr[0] = arr[0].trim();
-      arr[1] = arr[1].trim();
+      arr[0] = arr[0].trim().toLowerCase();
+      arr[1] = arr[1].trim().toLowerCase();
       //System.out.println(Arrays.toString(arr));
       
       return arr;
