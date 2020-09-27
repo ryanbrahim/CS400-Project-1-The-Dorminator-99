@@ -12,22 +12,21 @@ public class DorminatorDriver
   //Constants
   private static final String[] userCommands = {"exit", "help", "dorms"};   //possible commands
   private static final String fileName = "testData";    //file to read data from
+  //Class variables
+  private static UI<String, String> database = null;
 
   public static void main(String[] args) throws FileNotFoundException
   {
     // Initialization:
-    // Populate dorm database from data file
-    UI<String, String> database = new UI<String, String>(fileName);;
-    
-    
-    System.out.println("Hello, and welcome to The Dorminator 99th generation.");
-    System.out.println("Input a dorm name to learn more about that dorm, 'help' for commands, " 
-    + "or type 'exit' to exit.");
-    
-    System.out.println("Possible dorm names are:");
-    database.getAllKeys();
-
+    database = new UI<String, String>(fileName);
     Scanner scanner = new Scanner(System.in);
+    
+    //Begin
+    System.out.println("Hello, and welcome to The Dorminator 99th generation.");
+    System.out.println("Type a dorm name to learn more about that dorm, 'help' for commands, " 
+    + "or type 'exit' to exit.\n");
+    System.out.println("Possible dorm names are:");
+    printAllDorms();
 
     // Main command loop
     while (true)
@@ -43,16 +42,18 @@ public class DorminatorDriver
       else if(command.equals("help"))
         printUserCommands();
       
+      //dorms command
+      else if(command.equals("dorms"))
+        printAllDorms();
+      
       //valid dorm name
       else if(database.containsKey(command))
-      {
-        System.out.println(database.getValue(command));
-      }
+        printDormInfo(command);
       
       //invalid dorm name
       else
-        System.out.println("The dorm name you entered is invalid. To see a list of dorm names, " 
-        + " use  'help' ");
+        System.out.println("The dorm name you entered is invalid. Type 'dorms' to see possible "
+            + "dorms, or 'help' to get a list of commands.");
     }
 
     // closing program
@@ -62,10 +63,27 @@ public class DorminatorDriver
 
   }
 
-  
+  /**
+   * Helper method to print out the information for a particular dorm
+   * 
+   * @param dorm - the string name of the dorm
+   */
+  private static void printDormInfo(String dorm)
+  {
+    System.out.println(database.getValue(dorm));
+  }
   
   /**
-   * Method to print out all of the possible commands the user can call
+   * Helper method to print out all of the dorm names
+   */
+  private static void printAllDorms()
+  {
+    System.out.println("The possible dorms are:");
+    database.getAllKeys();
+  }
+  
+  /**
+   * Helper method to print out all of the possible commands the user can call
    */
   private static void printUserCommands()
   {
