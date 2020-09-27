@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
@@ -8,54 +9,50 @@ import java.util.Scanner;
  */
 public class DorminatorDriver
 {
-  
-  private static final String[] userCommands = {"exit", "help", "dorms"};
+  //Constants
+  private static final String[] userCommands = {"exit", "help", "dorms"};   //possible commands
+  private static final String fileName = "testData";    //file to read data from
 
-  public static void main(String[] args)
+  public static void main(String[] args) throws FileNotFoundException
   {
     // Initialization:
+    // Populate dorm database from data file
+    UI<String, String> database = new UI<String, String>(fileName);;
+    
+    
     System.out.println("Hello, and welcome to The Dorminator 99th generation.");
     System.out.println("Input a dorm name to learn more about that dorm, 'help' for commands, " 
     + "or type 'exit' to exit.");
-    // Populate dorm database from data file
-    String fileName = "";
-    UI<String, String> database = new UI(fileName);
-    database.populate(fileName);
+    
     System.out.println("Possible dorm names are:");
     database.getAllKeys();
 
     Scanner scanner = new Scanner(System.in);
 
-    // Main driver loop
+    // Main command loop
     while (true)
     {
       // get user's command
-      String userInput = scanner.nextLine().toLowerCase().trim();
+      String command = scanner.nextLine().toLowerCase().trim();
 
       // exit command
-      if(userInput.equals("exit"))
+      if(command.equals("exit"))
         break;
       
       //help command
-      if(userInput.equals("help"))
+      else if(command.equals("help"))
         printUserCommands();
       
       //valid dorm name
-      if(database.containsKey(userInput))
+      else if(database.containsKey(command))
       {
-        
+        System.out.println(database.getValue(command));
       }
       
       //invalid dorm name
       else
-      {
         System.out.println("The dorm name you entered is invalid. To see a list of dorm names, " 
         + " use  'help' ");
-      }
-
-      // getValue(String key) -gets the value for a corresponding key
-      // boolean containsKey() -checks if database contains the key
-      // getAllKeys() -print a list of all the keys in database
     }
 
     // closing program
@@ -65,6 +62,8 @@ public class DorminatorDriver
 
   }
 
+  
+  
   /**
    * Method to print out all of the possible commands the user can call
    */
