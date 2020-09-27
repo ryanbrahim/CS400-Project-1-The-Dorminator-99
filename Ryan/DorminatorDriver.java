@@ -1,3 +1,11 @@
+// --== CS400 File Header Information ==--
+// Name: Ryan Almizyed
+// Email: almizyed@wisc.edu
+// Team: MG
+// Role: Front-end developer
+// TA: Harit Vishwarkama
+// Lecturer: Florian Heimerl
+// Notes to Grader: <optional extra notes>
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
@@ -15,6 +23,11 @@ public class DorminatorDriver
   //Class variables
   private static UI<String, String> database = null;
 
+  /**
+   * The main method for the program. Contains the initialization and main command loop.
+   * @param args
+   * @throws FileNotFoundException if invalid filename is given
+   */
   public static void main(String[] args) throws FileNotFoundException
   {
     // Initialization:
