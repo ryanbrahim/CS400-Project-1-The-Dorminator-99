@@ -1,4 +1,10 @@
-<h6> In my programs, I used the script made by the data wranglers to load the data in my program. 
+<h6> In my programs, I used: 
+ <ul>
+  <li> The script made by Prannav (data wrangler) to load the data in my program. </li> 
+  <li> The Driver file made by Ryan (Front end developer) to act as the UI. </li> 
+ </ul> 
+  
+
  <br> 
 Since I am a back-end developer, I had to work on implementing the Hash Table correctly. </h6>
 
