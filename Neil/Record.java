@@ -1,6 +1,7 @@
 // --== CS400 File Header Information ==--
 // Name: Neil Bhutada
 // Email: nbhutada@wisc.edu
+// Role: Back-end developer
 // Team: MG
 // TA: Mr. Harit
 // Lecturer: Dr. Florian Heimeirl
