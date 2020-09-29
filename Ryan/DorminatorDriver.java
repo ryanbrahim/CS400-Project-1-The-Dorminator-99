@@ -36,7 +36,7 @@ public class DorminatorDriver
     Scanner scanner = new Scanner(System.in);
     
     //Begin
-    System.out.println("Hello, and welcome to The Dorminator 99th generation.");
+    System.out.println("\nHello, and welcome to The Dorminator 99th generation.");
     System.out.println("Type a dorm name to learn more about that dorm, 'help' for commands, " 
     + "or type 'exit' to exit.\n");
     //System.out.println("Possible dorm names are:");
