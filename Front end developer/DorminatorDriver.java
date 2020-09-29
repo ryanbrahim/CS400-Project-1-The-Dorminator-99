@@ -45,7 +45,7 @@ public class DorminatorDriver
     // Main command loop
     while (true)
     {
-      System.out.println("-------------------------");
+      System.out.println("\n-------------------------");
       System.out.print("Please enter a command / dorm name: ");
       // get user's command
       String command = scanner.nextLine().toLowerCase().trim();
