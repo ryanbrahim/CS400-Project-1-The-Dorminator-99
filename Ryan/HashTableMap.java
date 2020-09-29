@@ -1,232 +1,234 @@
 // --== CS400 File Header Information ==--
-// Name: Neil Bhutada
-// Email: nbhutada@wisc.edu
+// Name: Ryan Almizyed
+// Email: almizyed@wisc.edu
 // Team: MG
-// TA: Mr. Harit
-// Lecturer: Dr. Florian Heimeirl
-// Notes to Grader: My Program worked perfectly fine on Eclipse
+// TA: Harit Vishwarkama
+// Lecturer: Florian Heimerl
+// Notes to Grader: <optional extra notes>
 
 import java.util.LinkedList;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.lang.Math;
 
+/**
+ * This class defines a HashTableMap that implements the MapADT.
+ * 
+ * @author Ryan Almizyed
+ *
+ * @param <KeyType>   - the variable type for the key
+ * @param <ValueType> - the variable type for the value
+ */
 public class HashTableMap<KeyType, ValueType> implements MapADT<KeyType, ValueType>
 {
-  int capacity;
-  private LinkedList<Record> HashTable[];// This is our Hash Table.
+  private int capacity; // Capacity of the HashTable, size of the array
+  private int size; // number of key/value pairs in table
+  private LinkedList<HashNode<KeyType, ValueType>>[] hashTable;
+  private static final double LOAD_CAPACITY_THRESHOLD = 0.8;
 
-  // Constructor 1
+  /**
+   * Constructor for a HashTableMap
+   * 
+   * @param capacity - capacity of the HashTableMap
+   */
   public HashTableMap(int capacity)
   {
-    // This makes sure the maximum elements that Hash Table will store will be depend on the user
     this.capacity = capacity;
-    HashTable = new LinkedList[this.capacity];
+    this.hashTable = new LinkedList[capacity];
 
-    // This segment of the code is to declare an hashtable and array of linked lists
-    for (int i = 0; i < HashTable.length; i++)
-      HashTable[i] = new LinkedList<Record>();
   }
 
-  // Constructor 2
-  public HashTableMap()
+  
+  /**
+   * Default constructor for HashTableMap, default capacity of 10
+   */
+  public HashTableMap() // Default capacity = 10
   {
-    this.capacity = 10; // This variable will make sure the maximum elements the HashTable will hold
-                        // is 10
-    HashTable = new LinkedList[this.capacity];
-    for (int i = 0; i < HashTable.length; i++) // This segment of the code is to declare an hash
-                                               // table and array of linked lists
-    {
-      HashTable[i] = new LinkedList<Record>();
-
-    }
-
-
-
+    this(10);
   }
 
-  public void clear()
+  /**
+   * Adds the new key/value pair to the HashTableMap
+   * 
+   * @param key   - the key we are adding
+   * @param value - the value we are adding
+   * @returns true if successfully added, false if key is duplicate
+   */
+  public boolean put(KeyType key, ValueType value)
   {
-    for (int i = 0; i < capacity; i++) // checks whether key exists in the Hash Table.
-    {
-      for (int j = 0; j < HashTable[i].size(); j++)
-      {
-        HashTable[i].remove(j);
-
-      }
-
-
-    }
-
-
+    // check if key is a duplicate
+    if(this.containsKey(key))
+      return false;
+    // initialize key/value pair into node
+    HashNode<KeyType, ValueType> node = new HashNode<KeyType, ValueType>(key, value);
+    // insert node into hashTable
+    hashInsert(this.hashTable, node);
+    // increment size
+    this.size++;
+    // check load capacity, grow if needed
+    if(this.isOverloaded())
+      this.growTable();
+    // successfully added to table, return true
+    return true;
   }
 
+  /**
+   * Method to get the value for a corresponding key
+   * 
+   * @param key - the key to be searched for
+   * @returns the value pair for that key
+   * @throws NoNoSuchElementException if key is not in table
+   */
+  public ValueType get(KeyType key) throws NoSuchElementException
+  {
+    // determine hashIndex for this key
+    int hashIndex = this.hash(key);
+    // find the linkedList that corresponds to this hashIndex
+    var testList = this.hashTable[hashIndex];
+    if(this.hashTable[hashIndex] != null) // list exists
+      // iterate through linkedList
+      for (var testNode : testList)
+        // check if matching key
+        if(testNode.getKey().equals(key))
+          // if match, return the value
+          return testNode.getValue();
+    throw new NoSuchElementException("This key does not exist in the hash table.");
+  }
+
+  /**
+   * Method to get the number of key/value pairs
+   * 
+   * @returns size - the number of key/value pairs
+   */
   public int size()
   {
-    int numberOfElements = 0;
-
-    for (int i = 0; i < capacity; i++) // checks whether key exists in the Hash Table.
-    {
-      for (int j = 0; j < HashTable[i].size(); j++)
-      {
-        if((HashTable[i].get(j)) != null)
-          numberOfElements++;
-
-      }
-
-
-    }
-    return numberOfElements;
-
+    return this.size;
   }
 
-  public ValueType remove(KeyType key)
-  {
-    int index = Math.abs((key.hashCode()) % capacity); // Calculate index values
-    ValueType value;
-    for (int i = 0; i < HashTable[index].size(); i++)
-    {
-
-      if(HashTable[index].get(i).key == key)
-      {
-        value = (ValueType) HashTable[index].get(i).value;
-        HashTable[index].remove(i);
-        return value;
-
-      }
-
-
-    }
-
-    return null;
-
-  }
-
-
-  private void resize()
-  {
-    int numberOfElements = size();
-    float loadFactor = (float) numberOfElements / (float) capacity; // Load Factor declaration.
-    KeyType key;
-    ValueType value;
-    int flag = 0;
-
-    Record temp[] = new Record[this.capacity]; // temporary array for all records in the hash table
-    if(loadFactor >= 0.80)
-    {
-
-
-
-      for (int i = 0; i < (capacity); i++) // Goes through the Hash Table.
-      {
-
-        for (int j = 0; j < HashTable[i].size(); j++)
-        {
-          if((HashTable[i].get(j)) != null)
-          {
-            key = (KeyType) HashTable[i].get(j).key;
-            value = (ValueType) HashTable[i].get(j).value;
-            temp[flag++] = new Record(key, value); // Stroring all the legitimate records in the
-                                                   // array
-
-          }
-
-        }
-
-      }
-
-
-
-      capacity = capacity * 2; // increase the capacity by twice
-      HashTable = new LinkedList[capacity];
-      for (int i = 0; i < HashTable.length; i++) // Declare new Hash Table with twice the size
-      {
-        HashTable[i] = new LinkedList<Record>();
-
-      }
-
-
-      for (int i = 0; i < flag; i++)
-      {
-
-        put((KeyType) temp[i].key, (ValueType) temp[i].value); // Storing all the values back
-
-      }
-
-    }
-
-
-  }
-
+  /**
+   * Determines if the specified key is within the HashTable
+   * 
+   * @param key - the specified key to be searched for
+   * @returns true if key is in the HashTable, false otherwise
+   */
   public boolean containsKey(KeyType key)
   {
-    KeyType check;
-    for (int i = 0; i < this.capacity; i++) // checks whether key exists in the Hash Table.
-    {
-      for (int j = 0; j < HashTable[i].size(); j++)
-      {
-        check = (KeyType) (HashTable[i].get(j)).key;
-        if(check.equals(key))
-        {
-          return true; // Key already exists
-        }
-      }
-
-
-    }
+    // determine hashIndex for this key
+    int hashIndex = hash(key);
+    // find the linkedList that corresponds to this hashIndex
+    var testList = this.hashTable[hashIndex];
+    if(this.hashTable[hashIndex] != null) // list exists
+      // iterate through linkedList
+      for (var testNode : testList)
+        // check if matching key
+        if(testNode.getKey().equals(key))
+          // if match, return true
+          return true;
+    // key not found, return false
     return false;
   }
 
+  /**
+   * Removes the specified key/value pair from the HashTable. Returns the value that was removed.
+   * 
+   * @param key - the key to search for
+   * @returns the value of that key
+   */
+  public ValueType remove(KeyType key)
+  {
+    ValueType result = null;
+    // determine hashIndex for this key
+    int hashIndex = this.hash(key);
+    // find the linkedList that corresponds to this hashIndex
+    var testList = this.hashTable[hashIndex];
+    if(this.hashTable[hashIndex] != null) // list exists
+      // iterate through linkedList
+      for (var testNode : testList)
+        // check if matching key
+        if(testNode.getKey().equals(key))
+        {
+          // if match, save the value, then remove the node
+          result = testNode.getValue();
+          testList.remove(testNode);
+          this.size--;
+        }
 
-  public boolean put(KeyType key, ValueType value)
-  { // Inserts key-value combination into Hash Structure
-
-
-    int index;
-    if(containsKey(key))
-      return false;
-
-    index = Math.abs((key.hashCode()) % capacity); // Calculate index values
-    HashTable[index].add(new Record(key, value));
-    resize();
-    return true;
-
+    return result;
   }
 
-  public ValueType get(KeyType key) throws NoSuchElementException
+  /**
+   * Clears the HashTable of all nodes
+   */
+  public void clear()
   {
-    int index = Math.abs((key.hashCode()) % capacity); // Calculate index values
-
-
-    for (int i = 0; i < HashTable[index].size(); i++)
-    {
-
-      if(HashTable[index].get(i).key.equals(key))
-      {
-        return (ValueType) HashTable[index].get(i).value;
-      }
-
-
-    }
-    throw new NoSuchElementException("Element not found"); // Throws Exception when element is not
-                                                           // found
-
-
+    this.size = 0;
+    this.hashTable = new LinkedList[capacity];
   }
 
-  public void getAllKeys()
+  /**
+   * Hash function, generates
+   * 
+   * @param key - the key value
+   * @returns hashIndex - the table index for the corresponding key
+   */
+  private int hash(KeyType key)
   {
-    for (int i = 0; i < HashTable.length; i++)
-    {
-      for (int j = 0; j < HashTable[i].size(); j++)
-      {
-        if(HashTable[i].get(j) != null)
-          System.out.println(HashTable[i].get(j).key);
+    int hashCode = key.hashCode();
+    hashCode = Math.abs(hashCode);
+    int hashIndex = hashCode % this.capacity;
+    return hashIndex;
+  }
 
-      }
+  /**
+   * Grows table by doubling the capacity and rehashing
+   */
+  private void growTable()
+  {
+    // double the capacity
+    this.capacity = 2 * this.capacity;
+    // declare new, larger hashTable
+    LinkedList<HashNode<KeyType, ValueType>>[] newTable = new LinkedList[capacity];
+    // save the old table as oldTable
+    var oldTable = this.hashTable;
+    // need to rehash each element of oldTable to newTable
+    // iterate through array of lists
+    for (var list : oldTable)
+      // remove head of list until list is empty
+      while (list != null && !list.isEmpty())
+        // remove node, add to hash into newTable
+        hashInsert(newTable, list.remove());
 
-    }
+    // assign the newTable to the hashTable
+    this.hashTable = newTable;
+    
+  }
+  
 
+  /**
+   * Calculates the current load capacity and determines if we are overloaded
+   * 
+   * @returns true if load capacity >= threshold, false if otherwise
+   */
+  private boolean isOverloaded()
+  {
+    return (double) this.size / this.capacity >= LOAD_CAPACITY_THRESHOLD;
+  }
+
+  /**
+   * Helper method to insert a node to a LinkedList array 'table' using a hash function
+   * 
+   * @param table - the table to add to
+   * @param node  - the node to add
+   */
+  private void hashInsert(LinkedList<HashNode<KeyType, ValueType>>[] table,
+      HashNode<KeyType, ValueType> node)
+  {
+    // determine hash index
+    KeyType key = node.getKey();
+    int hashIndex = hash(key);
+    // determine whether a new linkedList needs to be created
+    if(table[hashIndex] == null)
+      table[hashIndex] = new LinkedList<>();
+    // there is an existing linkedList, add to it
+    table[hashIndex].add(0, node);
   }
 
 }
