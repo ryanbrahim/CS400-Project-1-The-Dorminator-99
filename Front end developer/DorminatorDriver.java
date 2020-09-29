@@ -6,6 +6,9 @@
 // TA: Harit Vishwarkama
 // Lecturer: Florian Heimerl
 // Notes to Grader: <optional extra notes>
+
+//Complete P1
+
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
@@ -19,7 +22,7 @@ public class DorminatorDriver
 {
   //Constants
   private static final String[] userCommands = {"exit", "help", "dorms"};   //possible commands
-  private static final String fileName = "testData";    //file to read data from
+  private static final String fileName = "dorms.txt";    //file to read data from
   //Class variables
   private static UI<String, String> database = null;
 
@@ -38,12 +41,14 @@ public class DorminatorDriver
     System.out.println("Hello, and welcome to The Dorminator 99th generation.");
     System.out.println("Type a dorm name to learn more about that dorm, 'help' for commands, " 
     + "or type 'exit' to exit.\n");
-    System.out.println("Possible dorm names are:");
+    //System.out.println("Possible dorm names are:");
     printAllDorms();
 
     // Main command loop
     while (true)
     {
+      System.out.println("-------------------------");
+      System.out.print("Please enter a command/ dorm name: ");
       // get user's command
       String command = scanner.nextLine().toLowerCase().trim();
 
