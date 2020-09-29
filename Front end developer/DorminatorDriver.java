@@ -7,8 +7,6 @@
 // Lecturer: Florian Heimerl
 // Notes to Grader: <optional extra notes>
 
-//Complete P1
-
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
