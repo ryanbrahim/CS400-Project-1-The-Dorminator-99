@@ -15,8 +15,22 @@ public class UI <KeyType, ValueType>
 		
 	}
 	public void getAllKeys()
-	{  
-		htm.getAllKeys();
+	{
+    try 
+    {
+      FileInput fi = new FileInput(this.filename);
+      while(fi.hasNext())
+      {
+        temp = fi.getNext(); //going to the next line
+        
+        System.out.println(temp[0]);
+      }
+    }
+    catch (FileNotFoundException e)
+    {
+      System.out.println(this.filename + " not found");
+      e.printStackTrace();
+    }
 	}
 public ValueType getValue(KeyType key)
 {
